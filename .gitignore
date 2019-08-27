@@ -1,4 +1,5 @@
 .vscode/
 build/
+tdd/
 sdkconfig
 sdkconfig.old
