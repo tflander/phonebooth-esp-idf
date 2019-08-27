@@ -1,4 +1,4 @@
 file(GLOB LIBRARY_SOURCE
         "*.c")
 
-add_library(unity STATIC ${LIBRARY_SOURCE})
+add_library(${LIB_UNITY} STATIC ${LIBRARY_SOURCE})

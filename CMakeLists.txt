@@ -9,6 +9,7 @@ project(phonebooth-esp-idf)
 
 IF( TDD )
   SET(MOCK_DIR ${PROJECT_SOURCE_DIR}/mock)
+  SET(UNITY_DIR ${PROJECT_SOURCE_DIR}/unity)
 
   SET(PROJECT_TEST ${PROJECT_NAME}-test)
   SET(LIB_UNITY unity)
