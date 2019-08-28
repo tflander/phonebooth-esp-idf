@@ -90,6 +90,16 @@ typedef enum
     GPIO_INTR_MAX,
 } gpio_int_type_t;
 
+typedef enum
+{
+    GPIO_PIN_INTR_DISABLE = 0,
+    GPIO_PIN_INTR_POSEDGE = 1,
+    GPIO_PIN_INTR_NEGEDGE = 2,
+    GPIO_PIN_INTR_ANYEDGE = 3,
+    GPIO_PIN_INTR_LOLEVEL = 4,
+    GPIO_PIN_INTR_HILEVEL = 5
+} GPIO_INT_TYPE;
+
 typedef struct
 {
     uint64_t pin_bit_mask;        /*!< GPIO pin: set with bit mask, each bit maps to a GPIO */
@@ -101,6 +111,8 @@ typedef struct
 
 typedef int32_t esp_err_t;
 
+typedef void (*gpio_isr_t)(void *);
+
 esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode);
 
 esp_err_t gpio_set_level(gpio_num_t gpio_num, uint32_t level);
@@ -108,5 +120,13 @@ esp_err_t gpio_set_level(gpio_num_t gpio_num, uint32_t level);
 esp_err_t gpio_config(const gpio_config_t *pGPIOConfig);
 
 void gpio_pad_select_gpio(uint8_t gpio_num);
+
+esp_err_t gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler, void *args);
+
+int gpio_get_level(gpio_num_t gpio_num);
+
+esp_err_t gpio_set_intr_type(gpio_num_t gpio_num, gpio_int_type_t intr_type);
+
+esp_err_t gpio_install_isr_service(int intr_alloc_flags);
 
 #endif

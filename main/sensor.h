@@ -6,4 +6,6 @@
 
 bool initialize_sensor(gpio_num_t pin);
 
+void sensor_isr_handler(void *arg);
+
 #endif

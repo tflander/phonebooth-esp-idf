@@ -28,7 +28,17 @@ TEST(Sensor, initializeSensor_InitializesSensorPin)
     TEST_ASSERT_EQUAL_INT(GPIO_PULLDOWN_ENABLE, g->pull_down_en);
 }
 
+TEST(Sensor, initialize_sensor_AddsISRHandler)
+{
+    initialize_sensor(PIN);
+    struct gpio_handler_value_t *v = get_gpio_handler_value();
+    TEST_ASSERT_EQUAL_INT(PIN, v->gpio_num);
+    TEST_ASSERT_EQUAL_PTR(sensor_isr_handler, v->isr_handler);
+    TEST_ASSERT_EQUAL_PTR((void *)PIN, v->args);
+}
+
 TEST_GROUP_RUNNER(Sensor)
 {
     RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
+    RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
 }
