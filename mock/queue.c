@@ -3,6 +3,7 @@
 #include <string.h>
 
 int64_t queue_send_value;
+bool xQueueCreate_was_called_v;
 
 BaseType_t xQueueGenericSendFromISR(QueueHandle_t xQueue, const void *const pvItemToQueue, BaseType_t *const pxHigherPriorityTaskWoken, const BaseType_t xCopyPosition)
 {
@@ -17,9 +18,19 @@ BaseType_t xQueueGenericReceive(QueueHandle_t xQueue, void *const pvBuffer, Tick
 
 QueueHandle_t xQueueCreate(uint32_t uxQueueLength, uint32_t uxItemSize)
 {
-    queue_send_value = 0;
     QueueHandle_t *q;
     return q;
+}
+
+void initialize_queue_mocking()
+{
+    queue_send_value = 0;
+    xQueueCreate_was_called_v = false;
+}
+
+bool xQueueCreate_was_called()
+{
+    return xQueueCreate_was_called_v;
 }
 
 int64_t get_queue_send_value()

@@ -4,6 +4,7 @@
 #include "../main/sensor.h"
 #include <driver/gpio.h>
 #include <mockgpio.h>
+#include <mockqueue.h>
 #include "esp_timer.h"
 
 #define PIN GPIO_NUM_4
@@ -13,6 +14,7 @@ TEST_GROUP(Sensor);
 TEST_SETUP(Sensor)
 {
     gpio_mock_initialize();
+    initialize_queue_mocking();
 }
 
 TEST_TEAR_DOWN(Sensor) {}
@@ -27,6 +29,7 @@ TEST(Sensor, initializeSensor_InitializesSensorPin)
     TEST_ASSERT_EQUAL_INT(GPIO_MODE_INPUT, g->mode);
     TEST_ASSERT_EQUAL_INT(GPIO_PULLUP_DISABLE, g->pull_up_en);
     TEST_ASSERT_EQUAL_INT(GPIO_PULLDOWN_ENABLE, g->pull_down_en);
+    TEST_ASSERT_TRUE(xQueueCreate_was_called());
 }
 
 TEST(Sensor, initialize_sensor_AddsISRHandler)
