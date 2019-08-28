@@ -4,6 +4,7 @@
 #include "task.h"
 #include "portmacro.h"
 #include "projdefs.h"
+#include "esp_err.h"
 
 #include <stdint.h>
 

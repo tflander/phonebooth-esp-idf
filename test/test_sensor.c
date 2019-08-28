@@ -4,6 +4,7 @@
 #include "../main/sensor.h"
 #include <driver/gpio.h>
 #include <mockgpio.h>
+#include "esp_timer.h"
 
 #define PIN GPIO_NUM_4
 
@@ -37,8 +38,20 @@ TEST(Sensor, initialize_sensor_AddsISRHandler)
     TEST_ASSERT_EQUAL_PTR((void *)PIN, v->args);
 }
 
+TEST(Sensor, handle_interrupt_on_positive_edge)
+{
+    initialize_sensor(PIN);
+
+    esp_timer_get_time_will_return(126);
+
+    sensor_isr_handler((void *)PIN);
+    int64_t received_value = get_queue_send_value();
+    TEST_ASSERT_EQUAL_INT64(126, received_value);
+}
+
 TEST_GROUP_RUNNER(Sensor)
 {
     RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
     RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
+    RUN_TEST_CASE(Sensor, handle_interrupt_on_positive_edge);
 }

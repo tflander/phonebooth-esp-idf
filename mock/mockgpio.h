@@ -16,4 +16,6 @@ const gpio_config_t *gpio_config_called_with();
 
 struct gpio_handler_value_t *get_gpio_handler_value();
 
+int64_t get_queue_send_value();
+
 #endif

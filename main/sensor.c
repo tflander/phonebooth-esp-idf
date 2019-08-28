@@ -1,10 +1,17 @@
 #include <stdbool.h>
 
 #include "sensor.h"
+#include "esp_timer.h"
 #include <driver/gpio.h>
+
+#include "freertos/queue.h"
+
+QueueHandle_t messageQueue;
 
 void sensor_isr_handler(void *arg)
 {
+    int64_t time = esp_timer_get_time();
+    xQueueSendFromISR(messageQueue, &time, NULL);
 }
 
 bool initialize_sensor(gpio_num_t pin)
@@ -18,6 +25,8 @@ bool initialize_sensor(gpio_num_t pin)
     gpio_config(&sensor_conf);
 
     gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin);
+
+    xQueueCreate(10, sizeof(int64_t)); //TODO Test that this happens
 
     return false;
 }
