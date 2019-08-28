@@ -1,11 +1,12 @@
 #include <driver/gpio.h>
+#include <string.h>
 #include <esp_err.h>
 
-const gpio_config_t *gpio_config_call_value;
+const gpio_config_t gpio_config_call_value;
 
 void gpio_mock_initialize()
 {
-    gpio_config_call_value = NULL;
+    memset((void *)&gpio_config_call_value, 0, sizeof(gpio_config_t));
 }
 
 esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode)
@@ -25,11 +26,11 @@ void gpio_pad_select_gpio(uint8_t gpio_num)
 
 esp_err_t gpio_config(const gpio_config_t *pGPIOConfig)
 {
-    gpio_config_call_value = pGPIOConfig;
+    memcpy((void *)&gpio_config_call_value, pGPIOConfig, sizeof(gpio_config_t));
     return ESP_OK;
 }
 
 const gpio_config_t *gpio_config_called_with()
 {
-    return gpio_config_call_value;
+    return &gpio_config_call_value;
 }
