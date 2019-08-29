@@ -46,13 +46,18 @@ TEST(Sensor, initialize_calls_xQueueCreate)
     TEST_ASSERT_EQUAL_INT(sizeof(int64_t), q->uxItemSize);
 }
 
-TEST(Sensor, handle_interrupt_on_positive_edge)
+TEST(Sensor, handle_interrupt_returns_time_spend_high)
 {
-    esp_timer_get_time_will_return(126);
-
+    esp_timer_get_time_will_return(100);
+    set_gpio_level(1);
     sensor_isr_handler((void *)PIN);
-    int64_t received_value = get_queue_send_value();
-    TEST_ASSERT_EQUAL_INT64(126, received_value);
+
+    esp_timer_get_time_will_return(200);
+    set_gpio_level(0);
+    sensor_isr_handler((void *)PIN);
+
+    int64_t time_difference = get_queue_send_value();
+    TEST_ASSERT_EQUAL_INT64(100, time_difference);
 }
 
 TEST_GROUP_RUNNER(Sensor)
@@ -60,5 +65,5 @@ TEST_GROUP_RUNNER(Sensor)
     RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
     RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
     RUN_TEST_CASE(Sensor, initialize_calls_xQueueCreate);
-    RUN_TEST_CASE(Sensor, handle_interrupt_on_positive_edge);
+    RUN_TEST_CASE(Sensor, handle_interrupt_returns_time_spend_high);
 }

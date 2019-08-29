@@ -7,11 +7,20 @@
 #include "freertos/queue.h"
 
 QueueHandle_t messageQueue;
+int64_t start_time = 0;
 
 void sensor_isr_handler(void *arg)
 {
-    int64_t time = esp_timer_get_time();
-    xQueueSendFromISR(messageQueue, &time, NULL);
+    int pin = (int)arg;
+    if (gpio_get_level(pin))
+    {
+        start_time = esp_timer_get_time();
+    }
+    else
+    {
+        int64_t time_difference = esp_timer_get_time() - start_time;
+        xQueueSendFromISR(messageQueue, &time_difference, NULL);
+    }
 }
 
 bool initialize_sensor(gpio_num_t pin)
@@ -26,7 +35,7 @@ bool initialize_sensor(gpio_num_t pin)
 
     gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin);
 
-    xQueueCreate(10, sizeof(int64_t)); //TODO Test that this happens
+    xQueueCreate(10, sizeof(int64_t));
 
     return false;
 }

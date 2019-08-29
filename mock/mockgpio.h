@@ -18,4 +18,6 @@ struct gpio_handler_value_t *get_gpio_handler_value();
 
 int64_t get_queue_send_value();
 
+void set_gpio_level(int level);
+
 #endif
