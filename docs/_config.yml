@@ -1,1 +1,4 @@
 theme: jekyll-theme-minimal
+title: "Phone Booth Esp-Idf Lab"
+description: "A phone booth occupancy sensor, written in C and using the esp-idf toolkit."
+show_downloads: "true"
