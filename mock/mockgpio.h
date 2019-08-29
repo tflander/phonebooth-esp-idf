@@ -20,7 +20,9 @@ void gpio_mock_initialize();
 
 const gpio_config_t *gpio_config_called_with();
 
-gpio_set_level_value_t *gpio_set_level_call_with();
+const gpio_set_level_value_t *gpio_set_level_call_with_values(int index);
+
+int gpio_set_level_call_values_length();
 
 gpio_handler_value_t *get_gpio_handler_value();
 
