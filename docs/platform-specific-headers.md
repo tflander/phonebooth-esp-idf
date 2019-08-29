@@ -6,10 +6,10 @@ With any embedded development you are likely to find platform specific headers t
 
 Create your own *mock headers* underneath the `mock` folder provided as part of this lab, with the same name and path.
 
-| Include Statement  | File Location |
-| ================== | ============= |
-| #include <driver/gpio.h> | mock/driver/gpio.h |
-| #include <esp_timer.h> | mock/esp_timer.h |
+    Include Statement           File Location
+    ========================    =============
+    #include <driver/gpio.h>    mock/driver/gpio.h
+    #include <esp_timer.h>      mock/esp_timer.h
 
 Inside those mock headers, copy the parts that you need from the actual headers.
 
