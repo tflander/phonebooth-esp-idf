@@ -28,10 +28,19 @@ void periodic_timer_callback(void *arg)
 {
     int triggerPin = (int)arg;
     gpio_set_level(triggerPin, 1);
-    
+
     usleep(10);
 
     gpio_set_level(triggerPin, 0);
+}
+
+void initialize_trigger(gpio_num_t triggerPin)
+{
+    // const esp_timer_create_args_t periodic_timer_args = {.callback = periodic_timer_callback};
+
+    // esp_timer_handle_t periodic_timer;
+    // esp_timer_create(&periodic_timer_args, &periodic_timer);
+    // esp_timer_start_periodic(periodic_timer, 500000);
 }
 
 bool initialize_sensor(gpio_num_t pin)

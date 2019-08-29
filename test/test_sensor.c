@@ -6,10 +6,12 @@
 #include <mockgpio.h>
 #include <mockqueue.h>
 #include <mocktime.h>
+#include <mockesp_timer.h>
 #include "esp_timer.h"
 
 #define PIN GPIO_NUM_4
 #define TRIGGERPIN GPIO_NUM_16
+#define TRIGGERPERIOD 1000
 
 TEST_GROUP(Sensor);
 
@@ -17,7 +19,9 @@ TEST_SETUP(Sensor)
 {
     gpio_mock_initialize();
     initialize_queue_mocking();
+    initialize_esp_timer_mocking();
     initialize_sensor(PIN);
+    initialize_trigger(TRIGGERPIN);
 }
 
 TEST_TEAR_DOWN(Sensor) {}
@@ -39,6 +43,19 @@ TEST(Sensor, initialize_sensor_AddsISRHandler)
     TEST_ASSERT_EQUAL_INT(PIN, v->gpio_num);
     TEST_ASSERT_EQUAL_PTR(sensor_isr_handler, v->isr_handler);
     TEST_ASSERT_EQUAL_PTR((void *)PIN, v->args);
+}
+
+TEST(Sensor, initializeTrigger_startTimer)
+{
+    esp_timer_create_call_value_t *tc = esp_timer_create_called_with();
+
+    TEST_ASSERT_NOT_NULL(tc->create_args);
+    TEST_ASSERT_NOT_NULL(tc->out_handle);
+    TEST_ASSERT_EQUAL_PTR(periodic_timer_callback, tc->create_args->callback);
+
+    esp_timer_start_periodic_value_t *tp = esp_timer_start_periodic_called_with();
+    TEST_ASSERT_EQUAL_INT(TRIGGERPERIOD, tp->period);
+    TEST_ASSERT_EQUAL_PTR(tc->out_handle, tp->timer);
 }
 
 TEST(Sensor, initialize_calls_xQueueCreate)
@@ -65,7 +82,7 @@ TEST(Sensor, handle_interrupt_returns_time_spend_high)
 TEST(Sensor, periodic_timer_callback_triggersEcho)
 {
     periodic_timer_callback((void *)TRIGGERPIN);
-    
+
     const gpio_set_level_value_t *l = gpio_set_level_call_with_values(0);
     TEST_ASSERT_EQUAL_INT(TRIGGERPIN, l->gpio_num);
     TEST_ASSERT_EQUAL_INT(1, l->level);
@@ -85,6 +102,7 @@ TEST_GROUP_RUNNER(Sensor)
 {
     RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
     RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
+    RUN_TEST_CASE(Sensor, initializeTrigger_startTimer);
     RUN_TEST_CASE(Sensor, initialize_calls_xQueueCreate);
     RUN_TEST_CASE(Sensor, handle_interrupt_returns_time_spend_high);
     RUN_TEST_CASE(Sensor, periodic_timer_callback_triggersEcho);
