@@ -5,6 +5,7 @@
 #include <driver/gpio.h>
 
 #include "freertos/queue.h"
+#include "newlib/time.h"
 
 QueueHandle_t messageQueue;
 int64_t start_time = 0;
@@ -28,7 +29,7 @@ void periodic_timer_callback(void *arg)
     int triggerPin = (int)arg;
     gpio_set_level(triggerPin, 1);
     
-    //call sleep
+    usleep(10);
 
     gpio_set_level(triggerPin, 0);
 }
