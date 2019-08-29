@@ -5,6 +5,7 @@
 #include <driver/gpio.h>
 #include <mockgpio.h>
 #include <mockqueue.h>
+#include <mocktime.h>
 #include "esp_timer.h"
 
 #define PIN GPIO_NUM_4
@@ -75,6 +76,9 @@ TEST(Sensor, periodic_timer_callback_triggersEcho)
 
     int calledLength = gpio_set_level_call_values_length();
     TEST_ASSERT_EQUAL_INT(2, calledLength);
+
+    useconds_t u = usleep_was_called_with();
+    TEST_ASSERT_EQUAL_INT(10, u);
 }
 
 TEST_GROUP_RUNNER(Sensor)
