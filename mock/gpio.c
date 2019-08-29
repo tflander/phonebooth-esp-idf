@@ -6,6 +6,7 @@
 
 const gpio_config_t gpio_config_call_value;
 
+gpio_set_level_value_t gpio_set_level_value;
 struct gpio_handler_value_t gpio_handler_value;
 
 int gpio_level_value;
@@ -24,6 +25,8 @@ esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode)
 
 esp_err_t gpio_set_level(gpio_num_t gpio_num, uint32_t level)
 {
+    gpio_set_level_value.gpio_num = gpio_num;
+    gpio_set_level_value.level = level;
     return ESP_OK;
 }
 
@@ -51,6 +54,11 @@ esp_err_t gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler, void
     return ESP_OK;
 }
 
+gpio_set_level_value_t *gpio_set_level_call_with()
+{
+    return &gpio_set_level_value;
+}
+
 struct gpio_handler_value_t *get_gpio_handler_value()
 {
     return &gpio_handler_value;
@@ -61,6 +69,7 @@ int gpio_get_level(gpio_num_t gpio_num)
     return gpio_level_value;
 }
 
+//TODO:CHANGE NAME
 void set_gpio_level(int level)
 {
     gpio_level_value = level;

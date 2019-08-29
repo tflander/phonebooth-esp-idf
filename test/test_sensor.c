@@ -8,6 +8,7 @@
 #include "esp_timer.h"
 
 #define PIN GPIO_NUM_4
+#define TRIGGERPIN GPIO_NUM_16
 
 TEST_GROUP(Sensor);
 
@@ -60,10 +61,20 @@ TEST(Sensor, handle_interrupt_returns_time_spend_high)
     TEST_ASSERT_EQUAL_INT64(100, time_difference);
 }
 
+TEST(Sensor, periodic_timer_callback_triggersEcho)
+{
+    periodic_timer_callback((void *)TRIGGERPIN);
+    
+    gpio_set_level_value_t *l = gpio_set_level_call_with();
+    TEST_ASSERT_EQUAL_INT(TRIGGERPIN, l->gpio_num);
+    TEST_ASSERT_EQUAL_INT(1, l->level);
+}
+
 TEST_GROUP_RUNNER(Sensor)
 {
     RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
     RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
     RUN_TEST_CASE(Sensor, initialize_calls_xQueueCreate);
     RUN_TEST_CASE(Sensor, handle_interrupt_returns_time_spend_high);
+    RUN_TEST_CASE(Sensor, periodic_timer_callback_triggersEcho);
 }
