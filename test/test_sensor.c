@@ -65,9 +65,16 @@ TEST(Sensor, periodic_timer_callback_triggersEcho)
 {
     periodic_timer_callback((void *)TRIGGERPIN);
     
-    gpio_set_level_value_t *l = gpio_set_level_call_with();
+    const gpio_set_level_value_t *l = gpio_set_level_call_with_values(0);
     TEST_ASSERT_EQUAL_INT(TRIGGERPIN, l->gpio_num);
     TEST_ASSERT_EQUAL_INT(1, l->level);
+
+    const gpio_set_level_value_t *l1 = gpio_set_level_call_with_values(1);
+    TEST_ASSERT_EQUAL_INT(TRIGGERPIN, l1->gpio_num);
+    TEST_ASSERT_EQUAL_INT(0, l1->level);
+
+    int calledLength = gpio_set_level_call_values_length();
+    TEST_ASSERT_EQUAL_INT(2, calledLength);
 }
 
 TEST_GROUP_RUNNER(Sensor)

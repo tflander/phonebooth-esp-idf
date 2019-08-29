@@ -27,8 +27,10 @@ void periodic_timer_callback(void *arg)
 {
     int triggerPin = (int)arg;
     gpio_set_level(triggerPin, 1);
-    // int64_t time_since_boot = esp_timer_get_time();
-    // ESP_LOGI(TAG, "Periodic timer called, time since boot: %lld us", time_since_boot);
+    
+    //call sleep
+
+    gpio_set_level(triggerPin, 0);
 }
 
 bool initialize_sensor(gpio_num_t pin)

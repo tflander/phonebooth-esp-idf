@@ -7,6 +7,8 @@
 const gpio_config_t gpio_config_call_value;
 
 gpio_set_level_value_t gpio_set_level_value;
+gpio_set_level_value_t gpio_set_level_values[5];
+int gpio_set_level_values_idx;
 gpio_handler_value_t gpio_handler_value;
 
 int gpio_level_value;
@@ -18,6 +20,8 @@ void gpio_mock_initialize()
     gpio_level_value = -1;
     gpio_set_level_value.gpio_num = 0;
     gpio_set_level_value.level = 0;
+
+    gpio_set_level_values_idx = 0;
 }
 
 esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode)
@@ -27,8 +31,11 @@ esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode)
 
 esp_err_t gpio_set_level(gpio_num_t gpio_num, uint32_t level)
 {
-    gpio_set_level_value.gpio_num = gpio_num;
-    gpio_set_level_value.level = level;
+    gpio_set_level_value_t *v = &gpio_set_level_values[gpio_set_level_values_idx];
+    v->gpio_num = gpio_num;
+    v->level = level;
+    gpio_set_level_values_idx++;
+
     return ESP_OK;
 }
 
@@ -56,9 +63,14 @@ esp_err_t gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler, void
     return ESP_OK;
 }
 
-gpio_set_level_value_t *gpio_set_level_call_with()
+const gpio_set_level_value_t *gpio_set_level_call_with_values(int index)
 {
-    return &gpio_set_level_value;
+    return &gpio_set_level_values[index];
+}
+
+int gpio_set_level_call_values_length()
+{
+    return gpio_set_level_values_idx;
 }
 
 gpio_handler_value_t *get_gpio_handler_value()
