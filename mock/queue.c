@@ -18,6 +18,7 @@ BaseType_t xQueueGenericReceive(QueueHandle_t xQueue, void *const pvBuffer, Tick
 
 QueueHandle_t xQueueCreate(uint32_t uxQueueLength, uint32_t uxItemSize)
 {
+    xQueueCreate_was_called_v = true;
     QueueHandle_t *q;
     return q;
 }
