@@ -1,6 +1,4 @@
----
-
----
+# Phone Booth ESP-IDF Learning Lab
 
 ## Description
 
