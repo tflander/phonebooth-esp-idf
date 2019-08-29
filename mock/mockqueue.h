@@ -3,13 +3,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-struct xQueueCreate_value
+typedef struct
 {
     uint32_t uxQueueLength;
     uint32_t uxItemSize;
-};
+} xQueueCreate_value_t;
 
-struct xQueueCreate_value *xQueueCreate_called_with();
+xQueueCreate_value_t *xQueueCreate_called_with();
 int64_t get_queue_send_value();
 bool xQueueCreate_was_called();
 void initialize_queue_mocking();

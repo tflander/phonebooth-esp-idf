@@ -34,7 +34,7 @@ TEST(Sensor, initializeSensor_InitializesSensorPin)
 
 TEST(Sensor, initialize_sensor_AddsISRHandler)
 {
-    struct gpio_handler_value_t *v = get_gpio_handler_value();
+    gpio_handler_value_t *v = get_gpio_handler_value();
     TEST_ASSERT_EQUAL_INT(PIN, v->gpio_num);
     TEST_ASSERT_EQUAL_PTR(sensor_isr_handler, v->isr_handler);
     TEST_ASSERT_EQUAL_PTR((void *)PIN, v->args);
@@ -43,7 +43,7 @@ TEST(Sensor, initialize_sensor_AddsISRHandler)
 TEST(Sensor, initialize_calls_xQueueCreate)
 {
     TEST_ASSERT_TRUE(xQueueCreate_was_called());
-    struct xQueueCreate_value *q = xQueueCreate_called_with();
+    xQueueCreate_value_t *q = xQueueCreate_called_with();
     TEST_ASSERT_EQUAL_INT(sizeof(int64_t), q->uxItemSize);
 }
 

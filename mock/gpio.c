@@ -7,15 +7,17 @@
 const gpio_config_t gpio_config_call_value;
 
 gpio_set_level_value_t gpio_set_level_value;
-struct gpio_handler_value_t gpio_handler_value;
+gpio_handler_value_t gpio_handler_value;
 
 int gpio_level_value;
 
 void gpio_mock_initialize()
 {
     memset((void *)&gpio_config_call_value, 0, sizeof(gpio_config_t));
-    memset((void *)&gpio_handler_value, 0, sizeof(struct gpio_handler_value_t));
+    memset((void *)&gpio_handler_value, 0, sizeof(gpio_handler_value_t));
     gpio_level_value = -1;
+    gpio_set_level_value.gpio_num = 0;
+    gpio_set_level_value.level = 0;
 }
 
 esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode)
@@ -59,7 +61,7 @@ gpio_set_level_value_t *gpio_set_level_call_with()
     return &gpio_set_level_value;
 }
 
-struct gpio_handler_value_t *get_gpio_handler_value()
+gpio_handler_value_t *get_gpio_handler_value()
 {
     return &gpio_handler_value;
 }

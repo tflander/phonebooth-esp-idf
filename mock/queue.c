@@ -4,7 +4,7 @@
 
 int64_t queue_send_value;
 bool xQueueCreate_was_called_v;
-struct xQueueCreate_value xQueueCreate_call_value;
+xQueueCreate_value_t xQueueCreate_call_value;
 
 BaseType_t xQueueGenericSendFromISR(QueueHandle_t xQueue, const void *const pvItemToQueue, BaseType_t *const pxHigherPriorityTaskWoken, const BaseType_t xCopyPosition)
 {
@@ -34,7 +34,7 @@ void initialize_queue_mocking()
     xQueueCreate_was_called_v = false;
 }
 
-struct xQueueCreate_value *xQueueCreate_called_with()
+xQueueCreate_value_t *xQueueCreate_called_with()
 {
     return &xQueueCreate_call_value;
 }
