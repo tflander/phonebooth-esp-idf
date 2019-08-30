@@ -2,18 +2,17 @@
 #define _MOCKGPIO_H_
 
 #include <driver/gpio.h>
+#include <stdbool.h>
 
-typedef struct
-{
-    gpio_num_t gpio_num;
-    gpio_isr_t isr_handler;
-    void *args;
+typedef struct {
+  gpio_num_t gpio_num;
+  gpio_isr_t isr_handler;
+  void *args;
 } gpio_handler_value_t;
 
-typedef struct
-{
-    gpio_num_t gpio_num;
-    uint32_t level;
+typedef struct {
+  gpio_num_t gpio_num;
+  uint32_t level;
 } gpio_set_level_value_t;
 
 void gpio_mock_initialize();
@@ -29,5 +28,7 @@ gpio_handler_value_t *get_gpio_handler_value();
 int64_t get_queue_send_value();
 
 void set_gpio_level(int level);
+
+bool gpio_install_isr_service_was_called();
 
 #endif

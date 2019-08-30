@@ -1,10 +1,11 @@
-#include <stdbool.h>
-
 #include "sensor.h"
-#include <driver/gpio.h>
 
-#include "freertos/queue.h"
-#include "newlib/time.h"
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+#include <stdbool.h>
+#include <unistd.h>
+
+#include <driver/gpio.h>
 
 #define INTERVAL 1000000
 
@@ -48,6 +49,7 @@ QueueHandle_t initialize_sensor(gpio_num_t pin) {
   sensor_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
   gpio_config(&sensor_conf);
 
+  gpio_install_isr_service(0);
   gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin);
 
   return xQueueCreate(10, sizeof(int64_t));

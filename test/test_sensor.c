@@ -41,6 +41,7 @@ TEST(Sensor, initialize_sensor_AddsISRHandler) {
   TEST_ASSERT_EQUAL_INT(PIN, v->gpio_num);
   TEST_ASSERT_EQUAL_PTR(sensor_isr_handler, v->isr_handler);
   TEST_ASSERT_EQUAL_PTR((void *)PIN, v->args);
+  TEST_ASSERT_TRUE(gpio_install_isr_service_was_called());
 }
 
 TEST(Sensor, initializeTrigger_startTimer) {
@@ -63,6 +64,7 @@ TEST(Sensor, initializeTrigger_startTimer) {
 
 TEST(Sensor, initialize_calls_xQueueCreate) {
   xQueueCreate_will_return(0x4);
+
   QueueHandle_t hdl = initialize_sensor(PIN);
   TEST_ASSERT_EQUAL_PTR(0x4, hdl);
   TEST_ASSERT_TRUE(xQueueCreate_was_called());

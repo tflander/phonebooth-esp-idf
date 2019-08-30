@@ -1,9 +1,11 @@
 #ifndef _SENSOR_H_
 #define _SENSOR_H_
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+
 #include <driver/gpio.h>
 #include <esp_timer.h>
-#include <freertos/queue.h>
 #include <stdbool.h>
 
 void initialize_trigger(gpio_num_t triggerPin,
