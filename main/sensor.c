@@ -12,7 +12,7 @@
 QueueHandle_t messageQueue;
 int64_t start_time = 0;
 
-void sensor_isr_handler(void *arg) {
+void IRAM_ATTR sensor_isr_handler(void *arg) {
   printf("Starting.....\n");
   int pin = (int)arg;
   if (gpio_get_level(pin)) {
