@@ -3,6 +3,10 @@
 
 #include "../main/sensor.h"
 #include "esp_timer.h"
+
+#include <freertos/FreeRTOS.h>
+#include <freertos/queue.h>
+
 #include <driver/gpio.h>
 #include <mockesp_timer.h>
 #include <mockgpio.h>
@@ -62,8 +66,20 @@ TEST(Sensor, initializeTrigger_startTimer) {
   TEST_ASSERT_EQUAL_PTR(timer, tp->timer);
 }
 
+TEST(Sensor, initializeTrigger_setsGpioForOutput) {
+
+  esp_timer_handle_t timer;
+
+  initialize_trigger(5, &timer);
+
+  const gpio_config_t *g = gpio_config_called_with();
+  TEST_ASSERT_EQUAL_INT(1ULL << 5, g->pin_bit_mask);
+  TEST_ASSERT_EQUAL_INT(GPIO_MODE_OUTPUT, g->mode);
+  TEST_ASSERT_EQUAL_INT(GPIO_INTR_DISABLE, g->intr_type);
+}
+
 TEST(Sensor, initialize_calls_xQueueCreate) {
-  xQueueCreate_will_return(0x4);
+  xQueueCreate_will_return((QueueHandle_t)0x4);
 
   QueueHandle_t hdl = initialize_sensor(PIN);
   TEST_ASSERT_EQUAL_PTR(0x4, hdl);
@@ -108,6 +124,7 @@ TEST_GROUP_RUNNER(Sensor) {
   RUN_TEST_CASE(Sensor, initializeSensor_InitializesSensorPin);
   RUN_TEST_CASE(Sensor, initialize_sensor_AddsISRHandler);
   RUN_TEST_CASE(Sensor, initializeTrigger_startTimer);
+  RUN_TEST_CASE(Sensor, initializeTrigger_setsGpioForOutput);
   RUN_TEST_CASE(Sensor, initialize_calls_xQueueCreate);
   RUN_TEST_CASE(Sensor, handle_interrupt_returns_time_spend_high);
   RUN_TEST_CASE(Sensor, periodic_timer_callback_triggersEcho);

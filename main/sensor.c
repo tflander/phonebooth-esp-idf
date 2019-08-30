@@ -13,12 +13,15 @@ QueueHandle_t messageQueue;
 int64_t start_time = 0;
 
 void sensor_isr_handler(void *arg) {
+  printf("Starting.....\n");
   int pin = (int)arg;
   if (gpio_get_level(pin)) {
     start_time = esp_timer_get_time();
+    printf("Rising.....\n");
   } else {
     int64_t time_difference = esp_timer_get_time() - start_time;
     xQueueSendFromISR(messageQueue, &time_difference, NULL);
+    printf("Falling,,,,,.\n");
   }
 }
 
@@ -29,10 +32,19 @@ void periodic_timer_callback(void *arg) {
   usleep(10);
 
   gpio_set_level(triggerPin, 0);
+
+  printf("Triggered.\n");
 }
 
 void initialize_trigger(gpio_num_t triggerPin,
                         esp_timer_handle_t *periodic_timer) {
+
+  gpio_config_t t;
+  t.pin_bit_mask = 1ULL << triggerPin;
+  t.intr_type = GPIO_INTR_DISABLE;
+  t.mode = GPIO_MODE_OUTPUT;
+  gpio_config(&t);
+
   const esp_timer_create_args_t periodic_timer_args = {
       .callback = periodic_timer_callback};
 
@@ -40,17 +52,24 @@ void initialize_trigger(gpio_num_t triggerPin,
   esp_timer_start_periodic(*periodic_timer, INTERVAL);
 }
 
+gpio_config_t sensor_conf;
+
 QueueHandle_t initialize_sensor(gpio_num_t pin) {
-  gpio_config_t sensor_conf;
   sensor_conf.pin_bit_mask = 1ULL << pin;
-  sensor_conf.intr_type = GPIO_INTR_NEGEDGE;
+  sensor_conf.intr_type = GPIO_INTR_ANYEDGE;
   sensor_conf.mode = GPIO_MODE_INPUT;
-  sensor_conf.pull_up_en = GPIO_PULLUP_DISABLE;
-  sensor_conf.pull_down_en = GPIO_PULLDOWN_ENABLE;
+  sensor_conf.pull_up_en = GPIO_PULLUP_ENABLE;
+  sensor_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
   gpio_config(&sensor_conf);
 
-  gpio_install_isr_service(0);
-  gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin);
+  int gpioerr = 0;
+  if ((gpioerr = gpio_install_isr_service(0)) != ESP_OK) {
+    printf("ERROR: gpio_install_isr_service returned %d\n", gpioerr);
+  }
+  if ((gpioerr = gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin)) !=
+      ESP_OK) {
+    printf("ERROR: gpio_isr_handler_add %d\n", gpioerr);
+  }
 
   return xQueueCreate(10, sizeof(int64_t));
 }
