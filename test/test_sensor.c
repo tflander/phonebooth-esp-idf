@@ -7,6 +7,7 @@
 #include <mockesp_timer.h>
 #include <mockgpio.h>
 #include <mockqueue.h>
+#include <mocktask.h>
 #include <mocktime.h>
 
 #define PIN GPIO_NUM_4
@@ -19,12 +20,12 @@ TEST_SETUP(Sensor) {
   gpio_mock_initialize();
   initialize_queue_mocking();
   initialize_esp_timer_mocking();
-  initialize_sensor(PIN);
 }
 
 TEST_TEAR_DOWN(Sensor) {}
 
 TEST(Sensor, initializeSensor_InitializesSensorPin) {
+  initialize_sensor(PIN);
   const gpio_config_t *g = gpio_config_called_with();
   TEST_ASSERT_NOT_NULL(g);
   TEST_ASSERT_EQUAL_INT(GPIO_INTR_NEGEDGE, g->intr_type);
@@ -35,6 +36,7 @@ TEST(Sensor, initializeSensor_InitializesSensorPin) {
 }
 
 TEST(Sensor, initialize_sensor_AddsISRHandler) {
+  initialize_sensor(PIN);
   gpio_handler_value_t *v = get_gpio_handler_value();
   TEST_ASSERT_EQUAL_INT(PIN, v->gpio_num);
   TEST_ASSERT_EQUAL_PTR(sensor_isr_handler, v->isr_handler);
@@ -42,6 +44,7 @@ TEST(Sensor, initialize_sensor_AddsISRHandler) {
 }
 
 TEST(Sensor, initializeTrigger_startTimer) {
+  initialize_sensor(PIN);
   esp_timer_handle_t timer;
   initialize_trigger(TRIGGERPIN, &timer);
   esp_timer_create_call_value_t *tc = esp_timer_create_called_with();
@@ -59,6 +62,9 @@ TEST(Sensor, initializeTrigger_startTimer) {
 }
 
 TEST(Sensor, initialize_calls_xQueueCreate) {
+  xQueueCreate_will_return(0x4);
+  QueueHandle_t hdl = initialize_sensor(PIN);
+  TEST_ASSERT_EQUAL_PTR(0x4, hdl);
   TEST_ASSERT_TRUE(xQueueCreate_was_called());
   xQueueCreate_value_t *q = xQueueCreate_called_with();
   TEST_ASSERT_EQUAL_INT(sizeof(int64_t), q->uxItemSize);

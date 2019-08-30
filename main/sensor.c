@@ -39,7 +39,7 @@ void initialize_trigger(gpio_num_t triggerPin,
   esp_timer_start_periodic(*periodic_timer, INTERVAL);
 }
 
-bool initialize_sensor(gpio_num_t pin) {
+QueueHandle_t initialize_sensor(gpio_num_t pin) {
   gpio_config_t sensor_conf;
   sensor_conf.pin_bit_mask = 1ULL << pin;
   sensor_conf.intr_type = GPIO_INTR_NEGEDGE;
@@ -50,7 +50,5 @@ bool initialize_sensor(gpio_num_t pin) {
 
   gpio_isr_handler_add(pin, sensor_isr_handler, (void *)pin);
 
-  xQueueCreate(10, sizeof(int64_t));
-
-  return false;
+  return xQueueCreate(10, sizeof(int64_t));
 }
