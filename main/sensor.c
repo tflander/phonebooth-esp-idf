@@ -34,7 +34,6 @@ void periodic_timer_callback(void *arg)
   usleep(10);
 
   gpio_set_level(triggerPin, 0);
-  printf("Trigger %d.\n", triggerPin);
 }
 
 void initialize_trigger(gpio_num_t triggerPin,
