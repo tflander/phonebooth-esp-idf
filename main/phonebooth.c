@@ -11,14 +11,30 @@
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "sensor.h"
+#include "indicator.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define TRIGGER_PIN GPIO_NUM_4
 #define ECHO_PIN GPIO_NUM_5
+#define INDICATOR_PIN GPIO_NUM_12
 
 static QueueHandle_t sensor_queue = NULL;
+
+void booth_logic(uint64_t echotime)
+{
+  uint64_t dist = echotime / 58;
+  printf("Distance: %llu cm\n", dist);
+  if (dist < 20)
+  {
+    indicator_on(true);
+  }
+  else
+  {
+    indicator_on(false);
+  }
+}
 
 static void phonebooth_task(void *arg)
 {
@@ -27,13 +43,14 @@ static void phonebooth_task(void *arg)
   {
     if (xQueueReceive(sensor_queue, &echotime, portMAX_DELAY))
     {
-      printf("Echo time: %llu\n", echotime);
+      booth_logic(echotime);
     }
   }
 }
 
 void app_main(void)
 {
+  indicator_initialize(INDICATOR_PIN);
   sensor_queue = initialize_sensor(ECHO_PIN);
   xTaskCreate(phonebooth_task, "phonebooth", 2048, NULL, 10, NULL);
 

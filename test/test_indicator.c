@@ -5,6 +5,9 @@
 #include "mockgpio.h"
 
 #define LEDPIN 16
+#define TWENTYCM 1160
+
+void booth_logic(uint64_t echotime);
 
 TEST_GROUP(Indicator);
 
@@ -44,9 +47,29 @@ TEST(Indicator, indicator_on_sets_gpio_low)
     TEST_ASSERT_EQUAL_INT(0, actual_output->level);
 }
 
+TEST(Indicator, indicator_led_pin_high_when_distance_less_than_20cm)
+{
+    indicator_initialize(LEDPIN);
+    booth_logic(TWENTYCM - 100);
+
+    const gpio_set_level_value_t *actual_output = gpio_set_level_call_with_values(0);
+    TEST_ASSERT_EQUAL_INT(1, actual_output->level);
+}
+
+TEST(Indicator, indicator_led_pin_low_when_distance_is_over_20cm)
+{
+    indicator_initialize(LEDPIN);
+    booth_logic(TWENTYCM + 100);
+
+    const gpio_set_level_value_t *actual_output = gpio_set_level_call_with_values(0);
+    TEST_ASSERT_EQUAL_INT(0, actual_output->level);
+}
+
 TEST_GROUP_RUNNER(Indicator)
 {
     RUN_TEST_CASE(Indicator, indicator_initialize_setup_gpio);
     RUN_TEST_CASE(Indicator, indicator_on_sets_gpio_high);
     RUN_TEST_CASE(Indicator, indicator_on_sets_gpio_low);
+    RUN_TEST_CASE(Indicator, indicator_led_pin_high_when_distance_less_than_20cm);
+    RUN_TEST_CASE(Indicator, indicator_led_pin_low_when_distance_is_over_20cm);
 }
