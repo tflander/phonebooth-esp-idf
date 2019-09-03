@@ -20,16 +20,20 @@
 
 static QueueHandle_t sensor_queue = NULL;
 
-static void phonebooth_task(void *arg) {
+static void phonebooth_task(void *arg)
+{
   uint64_t echotime;
-  for (;;) {
-    if (xQueueReceive(sensor_queue, &echotime, portMAX_DELAY)) {
+  for (;;)
+  {
+    if (xQueueReceive(sensor_queue, &echotime, portMAX_DELAY))
+    {
       printf("Echo time: %llu\n", echotime);
     }
   }
 }
 
-void app_main(void) {
+void app_main(void)
+{
   sensor_queue = initialize_sensor(ECHO_PIN);
   xTaskCreate(phonebooth_task, "phonebooth", 2048, NULL, 10, NULL);
 
