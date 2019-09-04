@@ -109,8 +109,8 @@ esp_err_t gpio_config(const gpio_config_t* pGPIOConfig)
 {
     // Copy the actual value, rather than storing the pointer.
     // The pointer may point to a local variable in the calling function, 
-    // and the contents may be overwritten as soon as this function exits.
-    // Learn from our pain.
+    // and the contents may be overwritten as soon as the calling function 
+    // exits.  Learn from our pain.
     memcpy(&gpio_config_called_value, pGPIOConfig, sizeof(gpio_config_t));
 }
 
@@ -124,6 +124,66 @@ void mockgpio_initialize()
     // Zero out the block of memory before each test case.
     memset(&gpio_config_called_value, 0, sizeof(gpio_config_t));
 }
+```
+
+Now we can modify our tests to use the new mock we created.
+
+``` C
+
+[...]
+
+#define LEDPIN GPIO_NUM_4
+
+[...]
+
+TEST_SETUP(Led) { mockgpio_initialize(); }
+
+[...]
+
+TEST(Led, initialized_SetsGpioForOutput)
+{
+    initialize_led(12);
+
+    const gpio_config_t *g = gpio_config_called_with();
+
+    TEST_ASSERT_EQUAL_INT(1ULL << LEDPIN, g->pin_bit_mask);
+    TEST_ASSERT_EQUAL_INT(GPIO_MODE_OUTPUT, g->mode);
+    TEST_ASSERT_EQUAL_INT(GPIO_INTR_DISABLE, g->intr_type);
+}
+```
+
+## Commands to run the test
+
+We need to create an executable to run the test
+
+``` bash
+$ mkdir tdd
+$ cd tdd
+$ cmake .. -DTDD=true
+$ make && ./test/phonebooth-esp-idf-test
+
+```
+
+Congrats! We've successfully failed out first test:
+
+``` bash
+~/workspace/phonebooth-esp-idf/tdd (task-11)$ make && test/phonebooth-esp-idf-test 
+[ 33%] Built target unity
+[100%] Built target phonebooth-esp-idf-test
+Unity test run 1 of 1
+./Users/clayton.c.dowling/workspace/phonebooth-esp-idf/test/test_led.c:20:TEST(Led, initialized_SetsGpioForOutput):FAIL: Expected 16 Was 0
+
+
+-----------------------
+1 Tests 1 Failures 0 Ignored 
+FAIL
+```
+
+## Making Our Test Pass
+ ... 
+
+``` bash
+# Passing output goes here
 ```
 
 ## Link to branch with finished examples, for reference
