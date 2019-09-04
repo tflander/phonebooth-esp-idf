@@ -166,7 +166,7 @@ $ make && ./test/phonebooth-esp-idf-test
 
 ```
 
-Congrats! We've successfully failed out first test:
+Congrats! We've successfully failed our first test:
 
 ``` bash
 ~/workspace/phonebooth-esp-idf/tdd (task-11)$ make && test/phonebooth-esp-idf-test 
@@ -184,7 +184,7 @@ FAIL
 
 
 ## Making Our Test Pass
-To make out test pass, we should edit `main/led.c`
+To make our test pass, we should edit `main/led.c`
 
 ``` C
 #include "led.h"
