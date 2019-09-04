@@ -13,7 +13,7 @@ TEST_SETUP(Led) { mockgpio_initialize(); }
 TEST_TEAR_DOWN(Led) {}
 
 TEST(Led, initialized_SetsGpioForOutput) {
-  initialize_led(12);
+  initialize_led(LEDPIN);
 
   const gpio_config_t *g = gpio_config_called_with();
 
