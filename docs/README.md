@@ -43,7 +43,7 @@ development.  You are also interested in stretching your capabilities.
 * After the interrupt code has finished running, the previously paused program continues
 
 ### How to configure an interrupt
-1. Follow the [gpio sample] (https://github.com/espressif/esp-idf/blob/master/examples/peripherals/gpio/main/gpio_example_main.c) on the espressif github
+1. Follow the [gpio sample](https://github.com/espressif/esp-idf/blob/master/examples/peripherals/gpio/main/gpio_example_main.c) on the espressif github
 1. Configure a gpio input pin to trigger an interrupt
 1. Create a queue to handle the events that occur from the pin
 1. Start gpio task
