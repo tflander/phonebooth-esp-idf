@@ -23,3 +23,15 @@ development.  You are also interested in stretching your capabilities.
 1. How to write software for the esp32 platform using the native SDK.
 1. How to write tests against system functions.
 1. How to manually mock functions and system header files in a project.
+
+
+## Issues we encountered
+
+* Do not use GPIO 2 as an output pin (board uses this and will reset)
+* Variables on the stack dissapear and are overwritten when they are out of scope
+  * Variables that must persist should be declared on the heap
+* Pass pointers to structures between methods, then copy the contents when you use it
+* Incrementally flash and test hardware
+  * printf is very helpful when debugging the hardware with idf monitor
+* Check polarity of components (see image with LED)
+* 
