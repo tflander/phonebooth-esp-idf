@@ -6,6 +6,30 @@ The hardware and software product from this lab will be a phone booth occupancy
 detector, similar in concept to the phone booth occupancy detectors present in
 our Ann Arbor office.
 
+## Objective
+
+Build and test drive a device which uses an [esp32](https://docs.espressif.com/projects/esp-idf/en/latest/hw-reference/get-started-devkitc.html) microcontroller and a 
+[HC-SR04](https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf) 
+ultrasonic range finder to tell if a phone booth is occupied.
+
+* The phone booth is occupied if the distance detected by the range finder is 
+  less than 20cm.
+* If the phone booth is occupied, an LED should be turned on.
+* If the phone booth is *not* occupied, the LED should *not* be turned on.
+
+### Materials
+
+* esp32 DevKitC microcontroller (we found female headers easier to work with)
+* HC-SR04 ultrasonic range finder
+* LED
+* Jumper cables
+* Breadboard
+* Low-resistance resistor (we used a 100&Omega; resistor)
+* 6 male to male jumpers (use 5 female to male and one male to male if your esp32 has male headers)
+* 1 breadboard
+
+![Lab Materials](phonebooth-flat-lay.jpg)
+
 ## Intended Audience
 
 You have some previous experience with integrated hardware/software
@@ -15,8 +39,14 @@ development.  You are also interested in stretching your capabilities.
 
 * Some knowledge of C software development.
 * A workstation with a working native C compiler.
-* CMake.
+* [CMake](https://cmake.org/).
 * The [esp-idf](https://docs.espressif.com/projects/esp-idf/en/stable/get-started/) toolkit.
+
+The lab uses CMake, a build configuration tool.  CMake lets use describe what the outcomes of 
+our build should be, and then generates appropriate build files to make that happen.  You will
+not need to fully understand CMake, and should not need to modify the build system to complete
+this lab.  If you would like to understand the build system better, we have annotated the 
+CMakeLists.txt files in each directory to make the intention of each command clear.
 
 ## What You Will Learn
 

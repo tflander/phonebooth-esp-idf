@@ -60,9 +60,8 @@ typedef enum {
 typedef enum {
   GPIO_MODE_DISABLE =
       GPIO_MODE_DEF_DISABLE, /*!< GPIO mode : disable input and output */
-  GPIO_MODE_INPUT = GPIO_MODE_DEF_INPUT, /*!< GPIO mode : input only */
-  GPIO_MODE_OUTPUT =
-      GPIO_MODE_DEF_OUTPUT, /*!< GPIO mode : output only mode */
+  GPIO_MODE_INPUT = GPIO_MODE_DEF_INPUT,   /*!< GPIO mode : input only */
+  GPIO_MODE_OUTPUT = GPIO_MODE_DEF_OUTPUT, /*!< GPIO mode : output only mode */
   GPIO_MODE_OUTPUT_OD = ((GPIO_MODE_DEF_OUTPUT) |
                          (GPIO_MODE_DEF_OD)), /*!< GPIO mode : output only with
                                                  open-drain mode     */
@@ -120,5 +119,21 @@ typedef int32_t esp_err_t;
 
 typedef void (*gpio_isr_t)(void *);
 
+esp_err_t gpio_set_direction(gpio_num_t gpio_num, gpio_mode_t mode);
+
+esp_err_t gpio_set_level(gpio_num_t gpio_num, uint32_t level);
+
+esp_err_t gpio_config(const gpio_config_t *pGPIOConfig);
+
+void gpio_pad_select_gpio(uint8_t gpio_num);
+
+esp_err_t gpio_isr_handler_add(gpio_num_t gpio_num, gpio_isr_t isr_handler,
+                               void *args);
+
+int gpio_get_level(gpio_num_t gpio_num);
+
+esp_err_t gpio_set_intr_type(gpio_num_t gpio_num, gpio_int_type_t intr_type);
+
+esp_err_t gpio_install_isr_service(int intr_alloc_flags);
 
 #endif
