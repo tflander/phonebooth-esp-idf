@@ -52,6 +52,5 @@ development.  You are also interested in stretching your capabilities.
 
 ### Tips on writing interrupts
 * Keep them as small in complexity and time as possible
-  * We do not want an interrupt to trigger when the current interrupt is occuring
-  * DON'T use a printf inside an isr handler
-  * DO have the isr handler set a variable to trigger a printf after the isr is done
+* We do not want an interrupt to trigger when the current interrupt is occuring
+* DON'T use a printf inside an isr handler (this might trigger a serial interrupt)
