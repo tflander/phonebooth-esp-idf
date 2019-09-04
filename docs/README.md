@@ -24,7 +24,7 @@ ultrasonic range finder to tell if a phone booth is occupied.
 * LED
 * Jumper cables
 * Breadboard
-* Low-resistance resistor (we used a 100$\Omega$ resistor)
+* Low-resistance resistor (we used a 100&Omega; resistor)
 
 ## Intended Audience
 
