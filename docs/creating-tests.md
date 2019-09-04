@@ -46,7 +46,7 @@ The next step is to write a test which confirms that those values where set on a
 
 TEST(Led, initialized_SetsGpioForOutput)
 {
-    initialize_led(12);
+    initialize_led(LEDPIN);
 
     const gpio_config_t *g = // ! How do I find out what gpio_config was called with?
 
@@ -142,7 +142,7 @@ TEST_SETUP(Led) { mockgpio_initialize(); }
 
 TEST(Led, initialized_SetsGpioForOutput)
 {
-    initialize_led(12);
+    initialize_led(LEDPIN);
 
     const gpio_config_t *g = gpio_config_called_with();
 
@@ -154,7 +154,9 @@ TEST(Led, initialized_SetsGpioForOutput)
 
 ## Commands to run the test
 
-We need to create an executable to run the test
+We need to create an executable to run the test.  The default esp32 build environment includes all of the microcontroller-specific libraries and builds with the esp32-specific compiler.  We want to run the tests on our local workstation, so we need to build with the compiler for our workstation, and replace the esp32-specific libraries with our mock implementations.
+
+To do that we'll create a separate folder, which we're calling `tdd`,  and building with the specific TDD flag.
 
 ``` bash
 $ mkdir tdd
@@ -171,7 +173,7 @@ Congrats! We've successfully failed out first test:
 [ 33%] Built target unity
 [100%] Built target phonebooth-esp-idf-test
 Unity test run 1 of 1
-./Users/clayton.c.dowling/workspace/phonebooth-esp-idf/test/test_led.c:20:TEST(Led, initialized_SetsGpioForOutput):FAIL: Expected 16 Was 0
+./Users/user.name/workspace/phonebooth-esp-idf/test/test_led.c:20:TEST(Led, initialized_SetsGpioForOutput):FAIL: Expected 16 Was 0
 
 
 -----------------------
@@ -179,11 +181,46 @@ Unity test run 1 of 1
 FAIL
 ```
 
-## Making Our Test Pass
- ... 
 
-``` bash
-# Passing output goes here
+
+## Making Our Test Pass
+To make out test pass, we should edit `main/led.c`
+
+``` C
+#include "led.h"
+#include "driver/gpio.h"
+
+void initialize_led(int pinNumber) {
+  gpio_config_t c;
+  c.pin_bit_mask = 1ULL << pinNumber;
+  c.mode = GPIO_MODE_OUTPUT;
+  c.intr_type = GPIO_INTR_DISABLE;
+  gpio_config(&c);
+}
 ```
 
-## Link to branch with finished examples, for reference
+Now, we can run our tests again with the following command:
+``` bash
+# if you have added new files, run 'cmake ..' to add them to your build.
+$ make && ./test/phonebooth-esp-idf-test
+```
+
+
+and we should now have a passing test:
+``` bash
+~/workspace/phonebooth-esp-idf/tdd (task-11)$ make && test/phonebooth-esp-idf-test 
+[ 33%] Built target unity
+[100%] Built target phonebooth-esp-idf-test
+Unity test run 1 of 1
+.
+
+-----------------------
+1 Tests 0 Failures 0 Ignored 
+OK
+```
+
+## What Have We Done
+
+We've created a test which ensures that we are able to configure a GPIO pin to output a signal, turning on an LED. To do this, we first needed to mock out an implementation of the esp32 system libraries that interact with and control the GPIO pins on the board. We've written our own implementation of a common pattern where we are able to access the call-values of mocked library functions.
+
+As you are completing this kata you will be able to follow a similar format.
