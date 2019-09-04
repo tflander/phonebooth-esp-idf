@@ -35,3 +35,14 @@ development.  You are also interested in stretching your capabilities.
   * printf is very helpful when debugging the hardware with idf monitor
 * Check polarity of components (see image with LED)
 * :squirrel:
+
+## Interrupts
+### What is an interrupt?
+* When a program is running and an event occurs, it may trigger an interrupt
+* This pauses the execution of the current program and runs code that was triggered by the interrupt
+* After the interrupt code has finished running, the previously paused program continues
+
+### Tips on writing interrupts
+* Keep them as small in complexity and time as possible
+  * DON'T use a printf inside an isr handler
+  * DO have the isr handler set a variable to trigger a printf after the isr is done
