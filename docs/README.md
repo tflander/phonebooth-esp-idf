@@ -39,7 +39,7 @@ development.  You are also interested in stretching your capabilities.
 ## Interrupts
 ### What is an interrupt?
 * When a program is running and an event occurs, it may trigger an interrupt
-* This pauses the execution of the current program and runs code that was triggered by the interrupt
+* The interrupt handler pauses the execution of the current program and runs code that was triggered by the interrupt
 * After the interrupt code has finished running, the previously paused program continues
 
 ### Tips on writing interrupts
