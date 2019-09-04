@@ -34,4 +34,4 @@ development.  You are also interested in stretching your capabilities.
 * Incrementally flash and test hardware
   * printf is very helpful when debugging the hardware with idf monitor
 * Check polarity of components (see image with LED)
-* 
+* :squirrel:
