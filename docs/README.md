@@ -28,7 +28,7 @@ ultrasonic range finder to tell if a phone booth is occupied.
 * 6 male to male jumpers (use 5 female to male and one male to male if your esp32 has male headers)
 * 1 breadboard
 
-![Lab Materials](phonebooth-flat-lay.jpg | width=100)
+![Lab Materials](phonebooth-flat-lay.jpg)
 
 ## Intended Audience
 
