@@ -26,6 +26,8 @@ ultrasonic range finder to tell if a phone booth is occupied.
 You have some previous experience with integrated hardware/software
 development.  You are also interested in stretching your capabilities.
 
+If you are new to C and test driving C, you might enjoy the [Game of Life In C](https://github.com/PillarTechnology/game-of-life-in-c) lab.
+
 ## Prerequisites
 
 * Some knowledge of C software development.
