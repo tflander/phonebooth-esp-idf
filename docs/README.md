@@ -19,16 +19,7 @@ ultrasonic range finder to tell if a phone booth is occupied.
 
 ### Materials
 
-* esp32 DevKitC microcontroller (we found female headers easier to work with)
-* HC-SR04 ultrasonic range finder
-* LED
-* Jumper cables
-* Breadboard
-* Low-resistance resistor (we used a 100&Omega; resistor)
-* 6 male to male jumpers (use 5 female to male and one male to male if your esp32 has male headers)
-* 1 breadboard
-
-![Lab Materials](phonebooth-flat-lay.jpg)
+* [Click here](materials.md)
 
 ## Intended Audience
 
@@ -54,21 +45,12 @@ CMakeLists.txt files in each directory to make the intention of each command cle
 1. How to write tests against system functions.
 1. How to manually mock functions and system header files in a project.
 
-
-## Issues we encountered
-
-* Do not use GPIO 2 as an output pin (board uses this and will reset)
-* Variables on the stack dissapear and are overwritten when they are out of scope
-  * Variables that must persist should be declared on the heap
-* Pass pointers to structures between methods, then copy the contents when you use it
-* Incrementally flash and test hardware
-  * printf is very helpful when debugging the hardware with idf monitor
-* Check polarity of components (see image with LED)
-* :squirrel:
-
 ## Helpful Information
 
 * [Creating Tests](creating-tests.md)
 * [Interrupts](interrupts.md)
 * [Tasks, Queues and Interrupts](tasks-and-queues.md)
 * [Platform Specific Headers](platform-specific-headers.md)
+* [Common Issues](common-issues.md)
+
+:squirrel:
