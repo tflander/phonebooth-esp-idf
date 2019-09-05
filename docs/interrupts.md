@@ -12,6 +12,8 @@
 1. Initialize gpio isr service
 1. Configure gpio service to the pin 
 
+For more information you can also see [Tasks and Queues](tasks-and-queues.md).
+
 ## Tips on writing interrupts
 * Keep them as small in complexity and time as possible
 * We do not want an interrupt to trigger when the current interrupt is occuring
