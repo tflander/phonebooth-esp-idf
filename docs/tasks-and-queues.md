@@ -68,3 +68,5 @@ Inside of the task, we can run some setup code, and then we can start looping fo
 The ISR operates under some restrictions.  It needs to respond quickly, before other interrupts occur, and it cannot trigger interrupts of its own.  It's worth noting that you can't put debugging printf statements in an ISR, because that triggers a serial interrupt.
 
 What it can do is put a message on a queue.  Once a message has been put on a queue the work of the ISR should be considered done.  Let a task perform any necessary processing on the data.
+
+For more information see [Interrupts](interrupts.md)
