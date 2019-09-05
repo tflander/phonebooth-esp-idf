@@ -19,16 +19,7 @@ ultrasonic range finder to tell if a phone booth is occupied.
 
 ### Materials
 
-* esp32 DevKitC microcontroller (we found female headers easier to work with)
-* HC-SR04 ultrasonic range finder
-* LED
-* Jumper cables
-* Breadboard
-* Low-resistance resistor (we used a 100&Omega; resistor)
-* 6 male to male jumpers (use 5 female to male and one male to male if your esp32 has male headers)
-* 1 breadboard
-
-![Lab Materials](phonebooth-flat-lay.jpg)
+* [Click here](materials.md)
 
 ## Intended Audience
 
