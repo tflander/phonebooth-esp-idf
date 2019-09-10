@@ -1,4 +1,4 @@
-# Tasks and Queues
+# Tasks, Queues, and Interrupt Service Routines
 
 The esp32 chip uses FreeRTOS as its default operating system.  FreeRTOS enables asynchronous operation by creating tasks, which encapsulate a discrete bit of functionality.  It also has Interrupt Service Routines (ISRs) which are intended to respond quickly to events on hardware.  ISR uses the queues to communicate their information quickly to the tasks.
 

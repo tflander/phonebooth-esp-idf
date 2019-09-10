@@ -47,6 +47,10 @@ CMakeLists.txt files in each directory to make the intention of each command cle
 1. How to write tests against system functions.
 1. How to manually mock functions and system header files in a project.
 
+## What About The Software That's Already Here?
+
+Setting up a test driven development build, and mocking out the [platform specific headers](platform-specific-headers.md) needed to build to run on your local workstation, takes a lot of work.  We've done that work for you, because it is a complex topic on its own.  If you would like more information please feel free to reach out to us and we'll be happy to help you understand what we did.
+
 ## Helpful Information
 
 * [Creating Tests](creating-tests.md)
