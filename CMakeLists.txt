@@ -5,8 +5,6 @@
 
 cmake_minimum_required(VERSION 3.5)
 
-# Set the project name
-project(phonebooth-esp-idf)
 
 # If we call cmake with -DTDD=true we enable the TDD features
 # of this build.
@@ -18,6 +16,9 @@ if( NOT TDD )
     # Only necessary for building and flashing to the esp32 device
     include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 endif()
+
+# Set the project name
+project(phonebooth-esp-idf)
 
 IF( TDD )
     # This includes the build steps necessary for test driving our code
